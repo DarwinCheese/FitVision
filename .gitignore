@@ -1,0 +1,98 @@
+# ========================
+# .NET Core / ASP.NET Core
+# ========================
+
+# Build artifacts
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet packages
+*.nupkg
+packages/
+*.snupkg
+*.nuspec
+
+# ASP.NET Core temp files
+*.log
+*.vs/
+
+# Publish output
+publish/
+
+# ========================
+# Node / React / Expo
+# ========================
+
+# Node modules
+node_modules/
+
+# Expo / React Native
+.expo/
+.expo-shared/
+web-build/
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.*.local
+*.local
+
+# Expo build artifacts
+.expo/
+.expo-shared/assets.json
+*.jks
+*.keystore
+*.p12
+*.pem
+
+# Metro bundler cache
+.expo/cache/
+metro-cache/
+babel-cache/
+
+# iOS
+ios/build/
+ios/Pods/
+ios/DerivedData/
+*.xcodeproj/project.xcworkspace/
+*.xcworkspace/
+*.xcuserstate
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcshareddata/
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+*.keystore
+local.properties
+
+# ========================
+# Miscellaneous
+# ========================
+
+.DS_Store
+Thumbs.db
+
+# Coverage / test outputs
+coverage/
+*.lcov

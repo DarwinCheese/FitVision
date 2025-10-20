@@ -1,0 +1,6 @@
+@FitVision.Api_HostAddress = http://localhost:5259
+
+GET {{FitVision.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
