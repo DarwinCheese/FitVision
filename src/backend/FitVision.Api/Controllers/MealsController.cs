@@ -18,16 +18,16 @@ public class MealsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
-        var res = await _mediator.Send(new GetMealsQuery());
+        var res = await _mediator.Send(new GetMealsQuery(), cancellationToken);
         return Ok(res);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateMealCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateMealCommand command, CancellationToken cancellationToken)
     {
-        var dto = await _mediator.Send(command);
+        var dto = await _mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(Get), new { id = dto.Id }, dto);
     }
 }

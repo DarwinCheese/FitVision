@@ -7,5 +7,7 @@ namespace FitVision.Application.DTOs
         public int Calories { get; set; }
         public DateTime EatenAt { get; set; }
         public string? Notes { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public Guid UserId { get; set; }
     }
 }

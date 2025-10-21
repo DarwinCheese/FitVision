@@ -1,16 +1,22 @@
-using FitVision.Infrastructure.InMemory;
-using FitVision.Domain.Interfaces;
-using FitVision.Application.Mapping;
 using FitVision.Application.Commands.CreateMeal;
+using FitVision.Application.Mapping;
+using FitVision.Domain.Interfaces;
+using FitVision.Infrastructure.Middleware;
+using FitVision.Infrastructure.Persistence;
+using FitVision.Infrastructure.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // MediatR (scan applicatie assembly)
 builder.Services.AddMediatR(cfg => { 
@@ -22,12 +28,17 @@ builder.Services.AddMediatR(cfg => {
 // AutoMapper
 builder.Services.AddAutoMapper(cfg => { cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; }, typeof(MappingProfile));
 
-// Infrastructure - register in-memory repo
-builder.Services.AddSingleton<IMealRepository, InMemoryMealRepository>();
+// Infrastructure - register repos
+builder.Services.AddScoped<IMealRepository, MealRepository>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 var app = builder.Build();
 
@@ -42,4 +53,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Run();

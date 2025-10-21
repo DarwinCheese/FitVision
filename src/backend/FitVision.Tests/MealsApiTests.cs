@@ -19,7 +19,7 @@ public class MealsApiTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task PostAndGetMeal_ReturnsCreatedMeal()
     {
         var client = _factory.CreateClient();
-        var newMeal = new CreateMealCommand("Integration Meal", 250, DateTime.UtcNow, null);
+        var newMeal = new CreateMealCommand("Integration Meal", 250, DateTime.UtcNow, null, DateTime.UtcNow, Guid.NewGuid());
 
         var postResponse = await client.PostAsJsonAsync("/api/meals", newMeal);
         postResponse.EnsureSuccessStatusCode();

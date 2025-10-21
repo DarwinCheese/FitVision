@@ -96,3 +96,4 @@ Thumbs.db
 # Coverage / test outputs
 coverage/
 *.lcov
+/src/backend/FitVision.Api/appsettings.Development.json
