@@ -7,5 +7,7 @@ namespace FitVision.Domain.Interfaces
         Task<Meal> AddAsync(Meal meal, CancellationToken cancellationToken = default);
         Task<IEnumerable<Meal>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<Meal?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Meal meal);
     }
 }

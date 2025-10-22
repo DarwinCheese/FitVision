@@ -45,7 +45,28 @@ namespace FitVision.Infrastructure.Repositories
 
         public async Task<Meal?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Meals.FindAsync([id], cancellationToken: cancellationToken);
+            return await _context.Meals.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+        }
+
+        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var meal = await _context.Meals.FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+            if (meal == null)
+            {
+                _logger.LogWarning("Meal {MealId} not found for deletion.", id);
+                return;
+            }
+
+            _context.Meals.Remove(meal);
+            await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Meal {MealId} deleted successfully.", id);
+        }
+
+        public async Task UpdateAsync(Meal meal)
+        {
+            _context.Meals.Update(meal);
+            _logger.LogInformation("Meal {MealId} deleted successfully.", meal.Id);
+            await _context.SaveChangesAsync();
         }
     }
 
