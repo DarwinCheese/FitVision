@@ -6,15 +6,15 @@ using FitVision.Application.DTOs;
 using Microsoft.Extensions.Logging;
 using FitVision.Application.Exceptions;
 
-namespace FitVision.Application.Commands.CreateMeal;
+namespace FitVision.Application.Commands.UpdateMeal;
 
-public class DeleteMealHandler : IRequestHandler<UpdateMealCommand, MealDto>
+public class UpdateMealHandler : IRequestHandler<UpdateMealCommand, MealDto>
 {
     private readonly IMealRepository _repo;
     private readonly IMapper _mapper;
-    private readonly ILogger<DeleteMealHandler> _logger;
+    private readonly ILogger<UpdateMealHandler> _logger;
 
-    public DeleteMealHandler(IMealRepository repo, IMapper mapper, ILogger<DeleteMealHandler> logger)
+    public UpdateMealHandler(IMealRepository repo, IMapper mapper, ILogger<UpdateMealHandler> logger)
     {
         _repo = repo;
         _mapper = mapper;
@@ -23,7 +23,7 @@ public class DeleteMealHandler : IRequestHandler<UpdateMealCommand, MealDto>
 
     public async Task<MealDto> Handle(UpdateMealCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Processing CreateMealCommand: {MealName}", request.Name);
+        _logger.LogInformation("Processing UpdateMealCommand: {MealId}", request.Id);
 
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ValidationException("Meal name cannot be empty.");

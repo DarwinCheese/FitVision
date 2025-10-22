@@ -1,6 +1,6 @@
 using MediatR;
 using FitVision.Application.DTOs;
 
-namespace FitVision.Application.Commands.CreateMeal;
+namespace FitVision.Application.Commands.UpdateMeal;
 
-public record UpdateMealCommand(string Name, int Calories, DateTime EatenAt, string? Notes, DateTime CreatedAt, Guid UserId) : IRequest<MealDto>;
+public record UpdateMealCommand(Guid Id, string? Name, int? Calories, DateTime? EatenAt, string? Notes, DateTime? CreatedAt) : IRequest<MealDto>;

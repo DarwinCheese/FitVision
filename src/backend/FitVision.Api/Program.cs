@@ -1,14 +1,13 @@
 using FitVision.Application.Commands.CreateMeal;
 using FitVision.Application.Mapping;
+using FitVision.Application.Commands.DeleteMeal;
+using FitVision.Application.Commands.UpdateMeal;
 using FitVision.Domain.Interfaces;
 using FitVision.Infrastructure.Middleware;
 using FitVision.Infrastructure.Persistence;
 using FitVision.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +22,9 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 // MediatR (scan applicatie assembly)
 builder.Services.AddMediatR(cfg => { 
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; ;
-    cfg.RegisterServicesFromAssembly(typeof(CreateMealHandler).Assembly); 
+    cfg.RegisterServicesFromAssembly(typeof(CreateMealHandler).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(DeleteMealHandler).Assembly); 
+    cfg.RegisterServicesFromAssembly(typeof(UpdateMealHandler).Assembly); 
     }
 );
 
