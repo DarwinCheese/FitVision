@@ -8,45 +8,38 @@ using FitVision.Application.Exceptions;
 
 namespace FitVision.Application.Commands.UpdateMeal;
 
-public class UpdateMealHandler : IRequestHandler<UpdateMealCommand, MealDto>
+public class UpdateMealHandler : IRequestHandler<UpdateMealCommand, Unit>
 {
     private readonly IMealRepository _repo;
-    private readonly IMapper _mapper;
     private readonly ILogger<UpdateMealHandler> _logger;
 
-    public UpdateMealHandler(IMealRepository repo, IMapper mapper, ILogger<UpdateMealHandler> logger)
+    public UpdateMealHandler(IMealRepository repo, ILogger<UpdateMealHandler> logger)
     {
         _repo = repo;
-        _mapper = mapper;
         _logger = logger;
     }
 
-    public async Task<MealDto> Handle(UpdateMealCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateMealCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Processing UpdateMealCommand: {MealId}", request.Id);
 
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ValidationException("Meal name cannot be empty.");
 
-        try
+        var meal = await _repo.GetByIdAsync(request.Id);
+        if (meal == null)
         {
-            var meal = new Meal
-            {
-                Name = request.Name,
-                Calories = request.Calories,
-                EatenAt = request.EatenAt,
-                Notes = request.Notes,
-                CreatedAt = DateTime.UtcNow
-            };
+            _logger.LogWarning("Meal with ID {MealId} not found", request.Id);
+            throw new NotFoundException($"Meal with ID {request.Id} not found.");
+        }
 
-            var added = await _repo.AddAsync(meal, cancellationToken);
-            return _mapper.Map<MealDto>(added);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while creating a new meal: {MealName}", request.Name);
-            throw new DomainException("An error occurred while saving your meal. Please try again later.");
-        }
-        
+        // Update fields
+        meal.Update(request.Name, request.Calories, request.EatenAt, request.Notes);
+
+        await _repo.UpdateAsync(meal);
+
+        _logger.LogInformation("Meal {MealId} updated successfully", request.Id);
+        return Unit.Value;
+
     }
 }

@@ -61,6 +61,13 @@ namespace FitVision.Infrastructure.Repositories
             await _context.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("Meal {MealId} deleted successfully.", id);
         }
+
+        public async Task UpdateAsync(Meal meal)
+        {
+            _context.Meals.Update(meal);
+            _logger.LogInformation("Meal {MealId} deleted successfully.", meal.Id);
+            await _context.SaveChangesAsync();
+        }
     }
 
 }

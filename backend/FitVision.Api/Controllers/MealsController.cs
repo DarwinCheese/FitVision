@@ -1,11 +1,12 @@
+using FitVision.Application.Commands.CreateMeal;
+using FitVision.Application.Commands.DeleteMeal;
+using FitVision.Application.Commands.PartialUpdateMealCommand;
+using FitVision.Application.Commands.UpdateMeal;
+using FitVision.Application.DTOs;
+using FitVision.Application.Queries.GetMealById;
+using FitVision.Application.Queries.GetMeals;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using FitVision.Application.DTOs;
-using FitVision.Application.Commands.CreateMeal;
-using FitVision.Application.Queries.GetMeals;
-using FitVision.Application.Queries.GetMealById;
-using FitVision.Application.Commands.DeleteMeal;
-using FitVision.Application.Commands.UpdateMeal;
 
 namespace FitVision.Api.Controllers;
 
@@ -35,9 +36,12 @@ public class MealsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateMeal(Guid Id, UpdateMealCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateMeal(Guid Id, [FromBody] UpdateMealCommand command, CancellationToken cancellationToken)
     {
-        await _mediator.Send(command with { Id = Id }, cancellationToken);
+        if (Id != command.Id)
+            return BadRequest();
+
+        await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
 
@@ -53,5 +57,13 @@ public class MealsController : ControllerBase
     {
         var dto = await _mediator.Send(command, cancellationToken);
         return CreatedAtAction(nameof(GetMealById), new { id = dto.Id }, dto);
+    }
+
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> PatchMeal(Guid id, PartialUpdateMealCommand command)
+    {
+        if (id != command.Id) return BadRequest();
+        await _mediator.Send(command);
+        return NoContent();
     }
 }
