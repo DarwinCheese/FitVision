@@ -42,9 +42,9 @@ public class MealsController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteMeal([FromBody] DeleteMealCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteMeal(Guid id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(command, cancellationToken);
+        await _mediator.Send(new DeleteMealCommand(id), cancellationToken);
         return NoContent();
     }
 
