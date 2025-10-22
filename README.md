@@ -54,10 +54,11 @@ This project demonstrates **enterprise-grade backend structure** and **scalable 
 │ ├── FitVision.Application/ # CQRS (commands, queries, DTOs)
 │ ├── FitVision.Domain/ # Entities & core logic
 │ ├── FitVision.Infrastructure/ # EF Core, Supabase integration
+| ├── FitVision.Tests/ # Tests
 │ ├── FitVision.API/ # Controllers, middleware, startup
-│ └── appsettings.json
+│   └── appsettings.json
 │
-├── mobile/ # Expo React Native App
+├── mobile/FitVision # Expo React Native App
 │ ├── app/ # Screens (expo-router)
 │ ├── components/ # Shared UI
 │ ├── lib/ # API, Supabase client
