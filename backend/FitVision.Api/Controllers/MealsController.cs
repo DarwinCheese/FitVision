@@ -34,14 +34,14 @@ public class MealsController : ControllerBase
         return Ok(res);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateMeal([FromBody] UpdateMealCommand command, CancellationToken cancellationToken)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateMeal(Guid Id, UpdateMealCommand command, CancellationToken cancellationToken)
     {
-        await _mediator.Send(command, cancellationToken);
+        await _mediator.Send(command with { Id = Id }, cancellationToken);
         return NoContent();
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteMeal(Guid id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new DeleteMealCommand(id), cancellationToken);
