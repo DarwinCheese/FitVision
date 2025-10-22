@@ -19,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-// MediatR (scan applicatie assembly)
+// MediatR (scan application assembly)
 builder.Services.AddMediatR(cfg => { 
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; ;
     cfg.RegisterServicesFromAssembly(typeof(CreateMealHandler).Assembly);

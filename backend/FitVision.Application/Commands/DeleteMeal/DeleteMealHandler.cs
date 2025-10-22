@@ -8,7 +8,7 @@ using FitVision.Application.Exceptions;
 
 namespace FitVision.Application.Commands.DeleteMeal;
 
-public class DeleteMealHandler : IRequestHandler<DeleteMealCommand, MealDto>
+public class DeleteMealHandler : IRequestHandler<DeleteMealCommand, Unit>
 {
     private readonly IMealRepository _repo;
     private readonly IMapper _mapper;
@@ -21,20 +21,20 @@ public class DeleteMealHandler : IRequestHandler<DeleteMealCommand, MealDto>
         _logger = logger;
     }
 
-    public async Task<MealDto> Handle(DeleteMealCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteMealCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Processing DeleteMealCommand: {MealId}", request.Id);
 
         try
         {
-            
+            await _repo.DeleteAsync(request.Id, cancellationToken);
+            _logger.LogInformation("Deleted Meal successfully: {MealId}", request.Id);
 
-            var added = await _repo.AddAsync(meal, cancellationToken);
-            return _mapper.Map<MealDto>(added);
+            return Unit.Value;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while creating a new meal: {MealName}", request.Name);
+            _logger.LogError(ex, "Error occurred while creating a new meal: {MealName}", request.Id);
             throw new DomainException("An error occurred while saving your meal. Please try again later.");
         }
         

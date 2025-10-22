@@ -36,8 +36,7 @@ public class UpdateMealHandler : IRequestHandler<UpdateMealCommand, MealDto>
                 Calories = request.Calories,
                 EatenAt = request.EatenAt,
                 Notes = request.Notes,
-                CreatedAt = DateTime.UtcNow,
-                UserId = request.UserId,
+                CreatedAt = DateTime.UtcNow
             };
 
             var added = await _repo.AddAsync(meal, cancellationToken);

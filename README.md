@@ -24,7 +24,6 @@ This project demonstrates **enterprise-grade backend structure** and **scalable 
 - **.NET 8** + **CQRS** (MediatR)
 - **Entity Framework Core** (Npgsql provider)
 - **Supabase (PostgreSQL)** for persistent storage
-- **Serilog** for structured logging
 - **Clean Architecture** with:
   - `Domain` – entities, value objects
   - `Application` – commands, queries, handlers
@@ -76,7 +75,7 @@ This project demonstrates **enterprise-grade backend structure** and **scalable 
 
 ### 1️⃣ Clone & Setup
 ```bash
-git clone https://github.com/<yourusername>/fitvision.git
+git clone https://github.com/DarwinCheese/fitvision.git
 cd fitvision
 ```
 
@@ -86,6 +85,16 @@ cd api
 dotnet restore
 dotnet ef database update
 dotnet run
+```
+
+Create a **appsettings.Development.json** file for Supabase conn string and license keys for **AutoMapper/MediatR**:
+```bash
+"ConnectionStrings": {
+  "DefaultConnection": ...
+},
+"AutoMapper": {
+  "LicenseKey": ...
+}
 ```
 
 ### 3️⃣ Mobile Setup
