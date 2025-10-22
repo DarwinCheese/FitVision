@@ -18,10 +18,13 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 // MediatR (scan applicatie assembly)
 builder.Services.AddMediatR(cfg => { 
     cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; ;
-    cfg.RegisterServicesFromAssemblies(typeof(CreateMealHandler).Assembly); 
+    cfg.RegisterServicesFromAssembly(typeof(CreateMealHandler).Assembly); 
+    cfg.RegisterServicesFromAssembly(typeof(DeleteMealHandler).Assembly); 
     }
 );
 

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using FitVision.Application.DTOs;
 using FitVision.Application.Commands.CreateMeal;
 using FitVision.Application.Queries.GetMeals;
+using FitVision.Application.Queries.GetMealById;
+using FitVision.Application.Commands.DeleteMeal;
 
 namespace FitVision.Api.Controllers;
 
@@ -18,16 +20,37 @@ public class MealsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMeal(CancellationToken cancellationToken)
     {
         var res = await _mediator.Send(new GetMealsQuery(), cancellationToken);
         return Ok(res);
     }
 
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetMealById(Guid id, CancellationToken cancellationToken)
+    {
+        var res = await _mediator.Send(new GetMealByIdQuery(id), cancellationToken);
+        return Ok(res);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateMeal(Guid id, CancellationToken cancellationToken)
+    {
+        var res = await _mediator.Send(new UpdateMealCommand(id), cancellationToken);
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteMeal(Guid id, CancellationToken cancellationToken)
+    {
+        var res = await _mediator.Send(new DeleteMealCommand(id), cancellationToken);
+        return NoContent();
+    }
+
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateMealCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateMeal([FromBody] CreateMealCommand command, CancellationToken cancellationToken)
     {
         var dto = await _mediator.Send(command, cancellationToken);
-        return CreatedAtAction(nameof(Get), new { id = dto.Id }, dto);
+        return CreatedAtAction(nameof(GetMealById), new { id = dto.Id }, dto);
     }
 }
