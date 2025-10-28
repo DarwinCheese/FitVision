@@ -59,7 +59,7 @@ public class MealsController : ControllerBase
     }
 
     [HttpPatch("{id:guid}")]
-    public async Task<IActionResult> PatchMeal(Guid id, PartialUpdateMealCommand command)
+    public async Task<IActionResult> PatchMeal(Guid id, [FromBody] PartialUpdateMealCommand command)
     {
         if (id != command.Id) return BadRequest();
         await _mediator.Send(command);
