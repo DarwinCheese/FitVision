@@ -1,8 +1,7 @@
 using FitVision.Application.Commands.CreateMeal;
 using FitVision.Application.Commands.DeleteMeal;
-using FitVision.Application.Commands.PartialUpdateMealCommand;
+using FitVision.Application.Commands.PartialUpdateMeal;
 using FitVision.Application.Commands.UpdateMeal;
-using FitVision.Application.DTOs;
 using FitVision.Application.Queries.GetMealById;
 using FitVision.Application.Queries.GetMeals;
 using MediatR;
