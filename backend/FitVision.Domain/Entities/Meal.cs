@@ -4,13 +4,24 @@ namespace FitVision.Domain.Entities
 {
     public class Meal
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public string Name { get; set; } = string.Empty;
-        public int Calories { get; set; }
-        public DateTime EatenAt { get; set; } = DateTime.UtcNow;
-        public string? Notes { get; set; }
-        public Guid UserId { get; set; }
-        public DateTime CreatedAt {  get; set; } = DateTime.UtcNow;
+        public Guid Id { get; private set; } = Guid.NewGuid();
+        public string Name { get; private set; } = string.Empty;
+        public int Calories { get; private set; }
+        public DateTime EatenAt { get; private set; } = DateTime.UtcNow;
+        public string? Notes { get; private set; }
+        public Guid UserId { get; private set; }
+        public DateTime CreatedAt {  get; private set; } = DateTime.UtcNow;
+
+        public Meal(string name, int calories, Guid userId, DateTime eatenAt, string? notes = null)
+        {
+            Name = name;
+            Calories = calories;
+            EatenAt = eatenAt;
+            Notes = notes;
+            CreatedAt = DateTime.UtcNow;
+            UserId = userId;
+            Id = Guid.NewGuid();
+        }
 
         public void Update(string name, int calories, DateTime eatenAt, string? notes)
         {
@@ -44,7 +55,7 @@ namespace FitVision.Domain.Entities
             Calories = calories;
         }
 
-        public void UpdateNotes(string notes)
+        public void UpdateNotes(string? notes)
         {
             Notes = notes;
         }

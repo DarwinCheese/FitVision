@@ -25,6 +25,7 @@ public class MealsApiTests : IClassFixture<WebApplicationFactory<Program>>
         postResponse.EnsureSuccessStatusCode();
 
         var getResponse = await client.GetFromJsonAsync<MealDto[]>("/api/meals");
+        Assert.NotNull(getResponse); // Ensure getResponse is not null before passing to Assert.Contains
         Assert.Contains(getResponse, m => m.Name == "Integration Meal");
     }
 }

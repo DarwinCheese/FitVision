@@ -1,14 +1,11 @@
-using AutoMapper;
 using MediatR;
-using FitVision.Domain.Interfaces;
-using FitVision.Domain.Entities;
-using FitVision.Application.DTOs;
 using Microsoft.Extensions.Logging;
 using FitVision.Application.Exceptions;
+using FitVision.Application.Interfaces;
 
 namespace FitVision.Application.Commands.UpdateMeal;
 
-public class UpdateMealHandler : IRequestHandler<UpdateMealCommand, Unit>
+internal sealed class UpdateMealHandler : IRequestHandler<UpdateMealCommand, Unit>
 {
     private readonly IMealRepository _repo;
     private readonly ILogger<UpdateMealHandler> _logger;

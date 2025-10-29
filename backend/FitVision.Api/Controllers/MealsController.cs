@@ -5,10 +5,12 @@ using FitVision.Application.Commands.UpdateMeal;
 using FitVision.Application.Queries.GetMealById;
 using FitVision.Application.Queries.GetMeals;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitVision.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class MealsController : ControllerBase
@@ -65,4 +67,7 @@ public class MealsController : ControllerBase
         await _mediator.Send(command);
         return NoContent();
     }
+
+    // TODO: Implement GetMealsByUser
+
 }

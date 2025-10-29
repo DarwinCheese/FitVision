@@ -1,12 +1,12 @@
 ﻿using FitVision.Application.Commands.PartialUpdateMeal;
 using FitVision.Application.Exceptions;
-using FitVision.Domain.Interfaces;
+using FitVision.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Meals.Commands.PartialUpdateMeal;
 
-public class PartialUpdateMealCommandHandler : IRequestHandler<PartialUpdateMealCommand, Unit>
+internal sealed class PartialUpdateMealCommandHandler : IRequestHandler<PartialUpdateMealCommand, Unit>
 {
     private readonly IMealRepository _repo;
     private readonly ILogger<PartialUpdateMealCommandHandler> _logger;

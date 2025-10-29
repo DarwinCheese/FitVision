@@ -1,7 +1,8 @@
 using AutoMapper;
 using MediatR;
-using FitVision.Domain.Interfaces;
 using FitVision.Application.DTOs;
+using FitVision.Application.Interfaces;
+using FitVision.Application.Exceptions;
 
 namespace FitVision.Application.Queries.GetMealById;
 
@@ -16,9 +17,10 @@ public class GetMealByIdHandler : IRequestHandler<GetMealByIdQuery, MealDto>
         _mapper = mapper;
     }
 
-    public async Task<MealDto?> Handle(GetMealByIdQuery request, CancellationToken cancellationToken)
+    public async Task<MealDto> Handle(GetMealByIdQuery request, CancellationToken cancellationToken)
     {
         var meal = await _repo.GetByIdAsync(request.Id, cancellationToken);
-        return meal == null ? null : _mapper.Map<MealDto>(meal);
+
+        return meal == null ? throw new NotFoundException("Meal not found") : _mapper.Map<MealDto>(meal);
     }
 }

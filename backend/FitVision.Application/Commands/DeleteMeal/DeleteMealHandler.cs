@@ -1,14 +1,12 @@
 using AutoMapper;
 using MediatR;
-using FitVision.Domain.Interfaces;
-using FitVision.Domain.Entities;
-using FitVision.Application.DTOs;
 using Microsoft.Extensions.Logging;
 using FitVision.Application.Exceptions;
+using FitVision.Application.Interfaces;
 
 namespace FitVision.Application.Commands.DeleteMeal;
 
-public class DeleteMealHandler : IRequestHandler<DeleteMealCommand, Unit>
+internal sealed class DeleteMealHandler : IRequestHandler<DeleteMealCommand, Unit>
 {
     private readonly IMealRepository _repo;
     private readonly IMapper _mapper;

@@ -1,38 +1,25 @@
-using FitVision.Application.Commands.CreateMeal;
+using FitVision.Api.Services;
+using FitVision.Application;
+using FitVision.Application.Interfaces;
 using FitVision.Application.Mapping;
-using FitVision.Application.Commands.DeleteMeal;
-using FitVision.Application.Commands.UpdateMeal;
-using FitVision.Domain.Interfaces;
+using FitVision.Infrastructure;
 using FitVision.Infrastructure.Middleware;
-using FitVision.Infrastructure.Persistence;
-using FitVision.Infrastructure.Repositories;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-// MediatR (scan application assembly)
-builder.Services.AddMediatR(cfg => { 
-    cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; ;
-    cfg.RegisterServicesFromAssembly(typeof(CreateMealHandler).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(DeleteMealHandler).Assembly); 
-    cfg.RegisterServicesFromAssembly(typeof(UpdateMealHandler).Assembly); 
-    }
-);
-
 // AutoMapper
 builder.Services.AddAutoMapper(cfg => { cfg.LicenseKey = builder.Configuration["AutoMapper:LicenseKey"]; }, typeof(MappingProfile));
 
-// Infrastructure - register repos
-builder.Services.AddScoped<IMealRepository, MealRepository>();
+// Dependency Injection (Application, Infrastructure)
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication(builder.Configuration);
+
+// Services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -52,6 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

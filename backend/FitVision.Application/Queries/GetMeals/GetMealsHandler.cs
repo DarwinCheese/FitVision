@@ -1,7 +1,7 @@
 using AutoMapper;
 using MediatR;
-using FitVision.Domain.Interfaces;
 using FitVision.Application.DTOs;
+using FitVision.Application.Interfaces;
 
 namespace FitVision.Application.Queries.GetMeals;
 

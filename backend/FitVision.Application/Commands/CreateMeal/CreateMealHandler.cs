@@ -1,44 +1,41 @@
 using AutoMapper;
 using MediatR;
-using FitVision.Domain.Interfaces;
 using FitVision.Domain.Entities;
 using FitVision.Application.DTOs;
 using Microsoft.Extensions.Logging;
 using FitVision.Application.Exceptions;
+using FitVision.Application.Interfaces;
 
 namespace FitVision.Application.Commands.CreateMeal;
 
-public class CreateMealHandler : IRequestHandler<CreateMealCommand, MealDto>
+internal sealed class CreateMealHandler : IRequestHandler<CreateMealCommand, MealDto>
 {
     private readonly IMealRepository _repo;
     private readonly IMapper _mapper;
     private readonly ILogger<CreateMealHandler> _logger;
+    private readonly ICurrentUserService _currentUserService;
 
-    public CreateMealHandler(IMealRepository repo, IMapper mapper, ILogger<CreateMealHandler> logger)
+    public CreateMealHandler(IMealRepository repo, IMapper mapper, ILogger<CreateMealHandler> logger, ICurrentUserService currentUserService)
     {
         _repo = repo;
         _mapper = mapper;
         _logger = logger;
+        _currentUserService = currentUserService;
     }
 
     public async Task<MealDto> Handle(CreateMealCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Processing CreateMealCommand: {MealName}", request.Name);
 
+        var userId = _currentUserService.UserId
+            ?? throw new UnauthorizedAccessException("User not logged in");
+
         if (string.IsNullOrWhiteSpace(request.Name))
             throw new ValidationException("Meal name cannot be empty.");
 
         try
         {
-            var meal = new Meal
-            {
-                Name = request.Name,
-                Calories = request.Calories,
-                EatenAt = request.EatenAt,
-                Notes = request.Notes,
-                CreatedAt = DateTime.UtcNow,
-                UserId = request.UserId,
-            };
+            var meal = new Meal(request.Name, request.Calories, userId, request.EatenAt, request.Notes);
 
             var added = await _repo.AddAsync(meal, cancellationToken);
             return _mapper.Map<MealDto>(added);

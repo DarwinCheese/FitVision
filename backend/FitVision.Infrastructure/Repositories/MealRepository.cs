@@ -1,5 +1,5 @@
-﻿using FitVision.Domain.Entities;
-using FitVision.Domain.Interfaces;
+﻿using FitVision.Application.Interfaces;
+using FitVision.Domain.Entities;
 using FitVision.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FitVision.Infrastructure.Repositories
 {
-    public class MealRepository : IMealRepository
+    internal sealed class MealRepository : IMealRepository
     {
         private readonly AppDbContext _context;
         private readonly ILogger<MealRepository> _logger;
@@ -67,6 +67,25 @@ namespace FitVision.Infrastructure.Repositories
             _context.Meals.Update(meal);
             _logger.LogInformation("Meal {MealId} deleted successfully.", meal.Id);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Meal>> GetByUserAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var meals = await _context.Meals.Where(m => m.UserId == userId).ToListAsync(cancellationToken: cancellationToken);
+                if (meals == null || meals.Count == 0)
+                {
+                    _logger.LogWarning("No meals found for User {UserId}.", userId);
+                    return [];
+                }
+                return meals;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving meals for User {UserId}.", userId);
+                throw;
+            }
         }
     }
 

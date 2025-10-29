@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FitVision.Domain.Entities;
 
 namespace FitVision.Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext
+    internal sealed class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -16,5 +11,12 @@ namespace FitVision.Infrastructure.Persistence
         }
 
         public DbSet<Meal> Meals => Set<Meal>();
+        public DbSet<User> Users => Set<User>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
